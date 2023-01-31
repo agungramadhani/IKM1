@@ -28,9 +28,13 @@
 							<tr>
 
 								<!-- <input id="dis_dokter" name="dis_dokter" class="form-control" type="text" value="" disabled> -->
+								
 								<select type="text" name="kus1" id="kus1" class="form-control">
-									<option value="0"><?= $pertanyaan['value'] ?></option>
-									
+									<?php 
+									$valuejwb = $this->db->query("select * from v_kuisioner where kode_parameter='".$pertanyaan['kode_parameter']."'")->result_array();;
+										foreach ($valuejwb as $vlj){ ?> 
+									<option value="0"><?= $vlj['value'] ?></option>
+									<?php  } ?>
 								</select>
 							</tr>
 							<?php endif ?>

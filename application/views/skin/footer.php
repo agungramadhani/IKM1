@@ -18,21 +18,21 @@
 
 <script>
 	$(document).ready(function() {
-		var kode_parameter = $('#where').val();
-		$.ajax({
-			url: "<?php echo base_url('kuisioner/cok') ?>",
-			type: "POST",
-			dataType: "application/json; charset=utf-8",
-			data: {
-				'kode_parameter': kode_parameter,
-			}
-		}).done(function(response) {
-			// for (var i = 1; i <= response.data.length; i++) {
-			// 	var option = '<option value="' + response.data[i].kode_parameter + '">'+ response.data[i].value+ '</option>';
-			// 	$('#kus1').append(option);
-			// }
-			console.log(response);
-		});
+		// var kode_parameter = $('#where').val();
+		// $.ajax({
+		// 	url: "<?php echo base_url('kuisioner/cok') ?>",
+		// 	type: "POST",
+		// 	dataType: "application/json; charset=utf-8",
+		// 	data: {
+		// 		'kode_parameter': kode_parameter,
+		// 	}
+		// }).done(function(response) {
+		// 	for (var i = 1; i <= response.data.length; i++) {
+		// 		var option = '<option value="' + response.data[i].kode_parameter + '">'+ response.data[i].value+ '</option>';
+		// 		$('#kus1').append(option);
+		// 	}
+		// 	// console.log(response);
+		// });
 	});
 	// $(document).ready(function() {
 	// 	$("#jawab").on('change', function() {
