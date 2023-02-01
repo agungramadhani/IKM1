@@ -10,12 +10,12 @@ class MKuisioner extends CI_Model
 
 	public function getNomerResponden()
 	{
-		$query = $this->db->get('tbl_jawaban');
+		$query = $this->db->get('transaksi');
 		return "RSP-" . str_pad($query->num_rows() + 1, 4, 0, STR_PAD_LEFT);
 	}
 	public function getNomerUser()
 	{
-		$query = $this->db->get('tbl_user');
+		$query = $this->db->get('visit');
 		return "USR" . str_pad($query->num_rows() + 1, 4, 0, STR_PAD_LEFT);
 	}
 
@@ -39,18 +39,15 @@ class MKuisioner extends CI_Model
 		$this->session->set_flashdata($data);
 	}
 
-	public function setDataKuisioner($id, $ket, $text, $kode)
+	public function setDataKuisioner($id, $kode,$as)
 	{
 		$data = array(
-			'nomor_kunjungan' => $this->getNomerResponden(),
-			'id_user' => $id,
-			// 'kode_pertanyaan' => $this->MKuisioner->getDataKuisioner(),
-			'value' => $ket,
-			'kode_pertanyaan' => $kode,
-			'textarea' => $text,
-			'waktu_pengisian' => date("Y-m-d H:i:s"),
+			'id_transaksi' 		=> $this->getNomerResponden(),
+			'id_visit' 			=> $id,
+			'kode_parameter' 	=> $kode,
+			'value' => $as
 		);
-		$ins = $this->db->insert('tbl_jawaban', $data);
+		$ins = $this->db->insert('transaksi', $data);
 		if (!$ins) {
 			$this->db->error();
 		}
@@ -79,7 +76,7 @@ class MKuisioner extends CI_Model
 		// 				'date_created' => $waktu_pengisian
 		// );
 
-		$this->db->insert('tbl_user', $data);
+		$this->db->insert('visit', $data);
 
 		if ($this->db->affected_rows() != 0) {
 			return null;
@@ -87,21 +84,21 @@ class MKuisioner extends CI_Model
 			return "Data gagal ditambahkan : " . $this->db->error;
 		}
 	}
-	public function getDataKuisioner($where)
-	{
+	// public function getDataKuisioner()
+	// {
 		
-			$query = $this->db->query("SELECT * FROM v_kuisioner where kode_parameter = status")->result_array();
+	// 		$query = $this->db->query("SELECT * FROM v_kuisioner");
 		
 		
-		// $indeks = 0;
-		// $result = array();
+	// 	// $indeks = 0;
+	// 	// $result = array();
 
-		// foreach ($query->result_array() as $row) {
-		// 	$result[$indeks++] = $row;
-		// }
+	// 	// foreach ($query->result_array() as $row) {
+	// 	// 	$result[$indeks++] = $row;
+	// 	// }
 
-		return $query;
-	}
+	// 	return $query;
+	// }
 	public function getPertanyaan()
 	{
 		$query = $this->db->query('SELECT DISTINCT * FROM parameter WHERE status = 1')->result_array();
@@ -109,7 +106,7 @@ class MKuisioner extends CI_Model
 	}
 	public function getDataUser()
 	{
-		$query = $this->db->get('tbl_user');
+		$query = $this->db->get('visit');
 		$indeks = 0;
 		$result = array();
 
@@ -122,8 +119,8 @@ class MKuisioner extends CI_Model
 	public function getDataidUser($id_user)
 	{
 		$this->db->select('*');
-		$this->db->from('tbl_user');
-		$this->db->where('id_user', $id_user);
+		$this->db->from('visit');
+		$this->db->where('id_visit', $id_user);
 		$query = $this->db->get();
 		if ($query->num_rows() > 0) {
 			$row = $query->row_array();
@@ -133,14 +130,14 @@ class MKuisioner extends CI_Model
 
 	public function getJumlahResponden()
 	{
-		$listKuisioner = $this->getDataKuisioner();
+		// $listKuisioner = $this->getDataKuisioner();
 
-		return $jumlahResponden = count($listKuisioner);
+		// return $jumlahResponden = count($listKuisioner);
 	}
 
 	public function hitungNilaiUnsurPelayanan()
 	{
-		$listKuisioner = $this->getDataKuisioner();
+		// $listKuisioner = $this->getDataKuisioner();
 
 		$hasil = array(
 			'prosedur' => 0,
@@ -159,83 +156,84 @@ class MKuisioner extends CI_Model
 			'keamanan' => 0
 		);
 
-		$jumlahResponden = count($listKuisioner);
+		// $jumlahResponden = count($listKuisioner);
 
-		foreach ($listKuisioner as $kuisioner) {
-			foreach ($kuisioner as $pelayanan => $nilai) {
-				if (array_key_exists($pelayanan, $hasil)) {
-					$hasil[$pelayanan] += $nilai;
-				}
-			}
+		// foreach ($listKuisioner as $kuisioner) {
+		// 	foreach ($kuisioner as $pelayanan => $nilai) {
+		// 		if (array_key_exists($pelayanan, $hasil)) {
+		// 			$hasil[$pelayanan] += $nilai;
+		// 		}
+		// 	}
 		}
 
-		foreach ($hasil as $unitPelayanan => $nilai) {
-			$hasil[$unitPelayanan] = $nilai / $jumlahResponden;
-		}
+		// foreach ($hasil as $unitPelayanan => $nilai) {
+		// 	$hasil[$unitPelayanan] = $nilai / $jumlahResponden;
+		// }
 
-		return $hasil;
-	}
+	// 	// return $hasil;
+	// }
 
-	public function hitungNilaiIKM()
-	{
-		$nilaiUnsurPelayanan = $this->hitungNilaiUnsurPelayanan();
-		$result = 0;
+	// public function hitungNilaiIKM()
+	// {
+	// 	$nilaiUnsurPelayanan = $this->hitungNilaiUnsurPelayanan();
+	// 	$result = 0;
 
-		foreach ($nilaiUnsurPelayanan as $unsurPelayanan) {
-			$result += $unsurPelayanan * 0.071;
-		}
+	// 	foreach ($nilaiUnsurPelayanan as $unsurPelayanan) {
+	// 		$result += $unsurPelayanan * 0.071;
+	// 	}
 
-		return $result;
-	}
+	// 	return $result;
+	// }
 
-	public function simpulanIKM()
-	{
-		$nilaiIKM = $this->hitungNilaiIKM();
-		$nilaiIKM = $nilaiIKM * 25;
+	// public function simpulanIKM()
+	// {
+	// 	$nilaiIKM = $this->hitungNilaiIKM();
+	// 	$nilaiIKM = $nilaiIKM * 25;
 
-		if ($nilaiIKM >= 25 && $nilaiIKM <= 43.75) {
-			$result['mutu'] = 'D';
-			$result['kinerja'] = 'Tidak Baik';
-		} else if ($nilaiIKM > 43.75 && $nilaiIKM <= 62.5) {
-			$result['mutu'] = 'C';
-			$result['kinerja'] = 'Kurang Baik';
-		} else if ($nilaiIKM > 62.5 && $nilaiIKM <= 81.25) {
-			$result['mutu'] = 'B';
-			$result['kinerja'] = 'Baik';
-		} else if ($nilaiIKM > 81.25 && $nilaiIKM <= 100) {
-			$result['mutu'] = 'A';
-			$result['kinerja'] = 'Sangat Baik';
-		}
-		$result['konversi'] = $nilaiIKM;
+	// 	if ($nilaiIKM >= 25 && $nilaiIKM <= 43.75) {
+	// 		$result['mutu'] = 'D';
+	// 		$result['kinerja'] = 'Tidak Baik';
+	// 	} else if ($nilaiIKM > 43.75 && $nilaiIKM <= 62.5) {
+	// 		$result['mutu'] = 'C';
+	// 		$result['kinerja'] = 'Kurang Baik';
+	// 	} else if ($nilaiIKM > 62.5 && $nilaiIKM <= 81.25) {
+	// 		$result['mutu'] = 'B';
+	// 		$result['kinerja'] = 'Baik';
+	// 	} else if ($nilaiIKM > 81.25 && $nilaiIKM <= 100) {
+	// 		$result['mutu'] = 'A';
+	// 		$result['kinerja'] = 'Sangat Baik';
+	// 	}
+	// 	$result['konversi'] = $nilaiIKM;
 
-		return $result;
-	}
+	// 	return $result;
+	// }
 
-	public function getGraphData()
-	{
-		$nilaiUnsurPelayanan = $this->hitungNilaiUnsurPelayanan();
-		$result = array();
-		$konversi = array(
-			'prosedur' => 'Prosedur Pelayanan',
-			'persyaratan' => 'Persyaratan Pelayanan',
-			'kejelasan' => 'Kejelasan Petugas Pelayanan',
-			'kedisiplinan' => 'Kedisiplinan Petugas Pelayanan',
-			'tanggungjawab' => 'Tanggung Jawab Petugas Pelayanan',
-			'kemampuan' => 'Kemampuan Petugas Pelayanan',
-			'kecepatan' => 'Kecepatan Pelayanan',
-			'keadilan' => 'Keadilan Mendapatkan Pelayanan',
-			'kesopanan' => 'Kesopanan dan Keramahan Petugas',
-			'kewajaranBiaya' => 'Kewajaran Biaya Pelayanan',
-			'kepastianBiaya' => 'Kepastian Biaya Pelayanan',
-			'kepastianJadwal' => 'Kepastian Jadwal Pelayanan',
-			'kenyamanan' => 'Kenyamanan Lingkungan',
-			'keamanan' => 'Keamanan Pelayanan'
-		);
+	// public function getGraphData()
+	// {
+	// 	$nilaiUnsurPelayanan = $this->hitungNilaiUnsurPelayanan();
+	// 	$result = array();
+	// 	$konversi = array(
+	// 		'prosedur' => 'Prosedur Pelayanan',
+	// 		'persyaratan' => 'Persyaratan Pelayanan',
+	// 		'kejelasan' => 'Kejelasan Petugas Pelayanan',
+	// 		'kedisiplinan' => 'Kedisiplinan Petugas Pelayanan',
+	// 		'tanggungjawab' => 'Tanggung Jawab Petugas Pelayanan',
+	// 		'kemampuan' => 'Kemampuan Petugas Pelayanan',
+	// 		'kecepatan' => 'Kecepatan Pelayanan',
+	// 		'keadilan' => 'Keadilan Mendapatkan Pelayanan',
+	// 		'kesopanan' => 'Kesopanan dan Keramahan Petugas',
+	// 		'kewajaranBiaya' => 'Kewajaran Biaya Pelayanan',
+	// 		'kepastianBiaya' => 'Kepastian Biaya Pelayanan',
+	// 		'kepastianJadwal' => 'Kepastian Jadwal Pelayanan',
+	// 		'kenyamanan' => 'Kenyamanan Lingkungan',
+	// 		'keamanan' => 'Keamanan Pelayanan'
+	// 	);
 
-		foreach ($nilaiUnsurPelayanan as $unsurPelayanan => $nilai) {
-			$result[$konversi[$unsurPelayanan]] = $nilai;
-		}
+	// 	foreach ($nilaiUnsurPelayanan as $unsurPelayanan => $nilai) {
+	// 		$result[$konversi[$unsurPelayanan]] = $nilai;
+	// 	}
 
-		return $result;
-	}
+	// 	return $result;
+	// }
+
 }

@@ -40,7 +40,7 @@ class Kuisioner extends CI_Controller
 		$nopol = $this->input->post('nopol');
 		$waktu_pengisian = date("Y-m-d H:i:s");
 		$dataArray = array(
-			'id_user' => $nomer,
+			'id_visit' => $nomer,
 			'nik' => $nik,
 			'nama' => $nama,
 			'alamat' => $alamat,
@@ -72,43 +72,75 @@ class Kuisioner extends CI_Controller
 		$this->load->template("dashboard_user", $data);
 	}
 
+	public function saveformm()
+	{
+		// $valuejwb = $this->db->query("select * from v_kuisioner where kode_parameter")->result_array();
+		$this->load->model('MKuisioner');
+		// $option = $this->input->post('kus');
+		
+		$id = $this->input->post('id_visit');
+		
+		// $text = $this->input->post('kus1');
+		// $ket = $this->input->post('value');
+		$kode = $_POST['kode_parameter'];
+		$as = $this->input->post('kus');
+		$ad = $this->input->post('kus1');
+	}
 
 
 	public function saveform()
 	{
 		$this->load->model('MKuisioner');
-		$data = $this->MKuisioner->getDataKuisioner();
-		$radio = $_POST['radio'];
-		$id = $this->input->post('id_user');
-		$text = $this->input->post('value');
-		$kode = $_POST['kode_pertanyaan'];
-		$i = 0;
-		foreach ($radio as $key => $rr) {
+		$id = $this->input->post('id_visit');
+		$kode = $_POST['kode_parameter'];
+		$as = $_POST['kus'];
+		// $ad = $this->input->post('kus1');
+		// $ad = $this->input->post('kus1');
+		// $ad = $_POST['kus1'];
+		// $i = 0;
+		
+		foreach ($kode as $key => $rr) {
 			// echo $rr;
-			$kod = $kode[$key];
-			// echo $id;
-
-			$data['error'] = $this->MKuisioner->setDataKuisioner($id, $rr, $text, $kod);
+			$kod = $as[$key];
+			
+		// // 	$option = $rr;
+		// // 	// echo $id;
+			// $data['error'] = $this->MKuisioner->setDataKuisioner($id, $kode,$as);
+			$data['error'] = $this->MKuisioner->setDataKuisioner($id, $as,  $rr, $kod);
+			// var_dump($id, $kode,  $rr, $kod);
 		}
-		// var_dump($radio);
+		//  var_dump($id, $kode,$as,$ad);
+	// 	foreach ($ad as $key => $rr) {
+	// 	// echo $rr;
+	// 	$kod = $kode[$key];
+	// // // 	// echo $id;
+	// 	$data['error'] = $this->MKuisioner->setDataKuisioner($id, $option, $kod, $rr);
+		
+	// }
+	// var_dump($id, $kode, $as,$kod, $rr);
 		// var_dump($kode);
 		// var_dump($dataarray2);
-		// $data['error'] = $this->MKuisioner->setDataKuisioner($dataarray2);
+		// $data['error'] = $this->MKuisioner->setDataKuisioner($data);
 		// $this->load->template("form_kuisioner");
-		header("Location:" . $_SERVER['HTTP_REFERER']);
+		// header("Location:" . $_SERVER['HTTP_REFERER']);
 	}
-	public function cok()
+	public function coklat()
 	{
-		$where = $this->input->post('kode_parameter');
-		$this->load->model('MKuisioner');
-		//$where = 1;
-		$ss = $this->MKuisioner->getDataKuisioner($where);
-		// foreach
-		// 	var option = '<option value="' + response.data[i].kode_parameter + '">'+ response.data[i].value+ '</option>';
-		// 	$('#kus1').append(option);
-		// }
-		// $this->load->template("form_kuisioner", $data);
-		echo json_encode($ss);
+		//variabel nim yang dikirimkan form.phpaaa
+
+		//mengambil data
+		$id = $_GET['id_visit'];
+		$result = $this->MKuisioner->getDataidUser($id);
+		$data = array(
+            'id_visit'	=> $result['id_visit'],
+			'nik'      =>  $result['nik'],
+            'nama'      =>  $result['nama'],
+            'alamat'   =>  $result['alamat'],
+            'umur'      =>  $result['umur'],
+            'jenkel'      =>  $result['jenkel'],);
+
+		//tampil data
+		echo json_encode($data);
 
 	}
 	public function form()
@@ -122,7 +154,7 @@ class Kuisioner extends CI_Controller
 		} else {
 			// $data['data'] = $this->load->model('MKuisioner');
 			// $data = $this->MKuisioner->getDataKuisioner();
-			$id_user = $this->input->post('id_user');
+			$id_user = $this->input->post('id_visit');
 			$result = $this->MKuisioner->getDataidUser($id_user);
 			if (!empty($result)) {
 				$data['error'] = $this->MKuisioner->getDataKuisioner();
