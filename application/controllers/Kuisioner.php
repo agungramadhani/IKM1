@@ -94,22 +94,35 @@ class Kuisioner extends CI_Controller
 		$id = $this->input->post('id_visit');
 		$kode = $_POST['kode_parameter'];
 		$as = $_POST['kus'];
+		foreach ($as as $key => $value) {
+			$data = array(
+				'id_transaksi' 	=> $this->MKuisioner->getNomerResponden(),
+				'id_visit' => $id,
+				'kode_parameter' => $kode[$key],
+				'value' => $value
+			);
+			$this->db->insert('transaksi', $data);
+		}
+		
+		
+		
+		// $as = $_POST['kus1'];
 		// $ad = $this->input->post('kus1');
 		// $ad = $this->input->post('kus1');
 		// $ad = $_POST['kus1'];
 		// $i = 0;
-		
-		foreach ($kode as $key => $rr) {
-			// echo $rr;
-			$kod = $as[$key];
+		// var_dump($id, $kode, $as);
+		// foreach ($kode as $key => $rr) {
+		// 	// echo $rr;
+		// 	$kod = $as[$key];
 			
-		// // 	$option = $rr;
-		// // 	// echo $id;
-			// $data['error'] = $this->MKuisioner->setDataKuisioner($id, $kode,$as);
-			$data['error'] = $this->MKuisioner->setDataKuisioner($id, $as,  $rr, $kod);
-			// var_dump($id, $kode,  $rr, $kod);
-		}
-		//  var_dump($id, $kode,$as,$ad);
+		// // // 	$option = $rr;
+		// // // 	// echo $id;
+		// 	// $data['error'] = $this->MKuisioner->setDataKuisioner($id, $kode,$as);
+		// 	$data['error'] = $this->MKuisioner->setDataKuisioner($id, $as,  $rr, $kod);
+		// 	// var_dump($id, $kode,  $rr, $kod);
+		// }
+		// //  var_dump($id, $kode,$as,$ad);
 	// 	foreach ($ad as $key => $rr) {
 	// 	// echo $rr;
 	// 	$kod = $kode[$key];
