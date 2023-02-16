@@ -86,6 +86,7 @@
 
     .garis_tepi1 {
       border: 2px solid black;
+
     }
   </style>
 </head>
@@ -134,10 +135,10 @@
 
       </tr>
       <tr>
-        <td><?php if (empty($list['instansi'])) {
-              echo "Instansi Kosong";
+        <td><?php if (empty($list['alamat'])) {
+              echo "Alamat Kosong";
             } else {
-              echo $list['instansi'];
+              echo $list['alamat'];
             } ?></td>
       </tr>
       <tr>

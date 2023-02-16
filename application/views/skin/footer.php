@@ -52,6 +52,68 @@
 	// 	});
 	// });
 </script>
+<script type="text/javascript">
+	$(function ii() {
+		$("#organisasi").change(function() {
+			if ($(this).val() == 5) {
+				$("#organisasii").removeAttr("disabled");
+				$("#organisasii").focus();
+			} else {
+				$("#organisasii").attr("disabled", "disabled");
+			}
+		});
+	});
+</script>
+<script type="text/javascript">
+	$(function suku() {
+		$("#suku").change(function() {
+			if ($(this).val() == 5) {
+				$("#sukuu").removeAttr("disabled");
+				$("#sukuu").focus();
+			} else {
+				$("#sukuu").attr("disabled", "disabled");
+			}
+		});
+	});
+</script>
+<script type="text/javascript">
+	$(function agama() {
+		$("#agama").change(function() {
+			if ($(this).val() == 5) {
+				$("#agamaa").removeAttr("disabled");
+				$("#agamaa").focus();
+			} else {
+				$("#agamaa").attr("disabled", "disabled");
+			}
+		});
+	});
+</script>
+<script type="text/javascript">
+	$(function pekerjaan() {
+		$("#pekerjaan").change(function() {
+			if ($(this).val() == 5) {
+				$("#pekerjaann").removeAttr("disabled");
+				$("#pekerjaann").focus();
+			} else {
+				$("#pekerjaann").attr("disabled", "disabled");
+			}
+		});
+	});
+</script>
+<script type="text/javascript">
+	$(function pekerjaanortu() {
+		$("#pekerjaanortu").change(function() {
+			if ($(this).val() == 5) {
+				$("#pekerjaanortuu").removeAttr("disabled");
+				$("#pekerjaanortuu").focus();
+			} else {
+				$("#pekerjaanortuu").attr("disabled", "disabled");
+			}
+		});
+	});
+</script>
+
+
 </body>
 
 </html>
